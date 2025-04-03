@@ -49,7 +49,7 @@ class LyricData private constructor(parcel: Parcel) : Parcelable {
     override fun describeContents(): Int = 0
 
     init {
-        type = OperateType.values()[parcel.readInt()]
+        type = OperateType.entries.toTypedArray()[parcel.readInt()]
         lyric = parcel.readString() ?: ""
         extraData.extra = parcel.readBundle().let {
             val hashMap = HashMap<String, Any>()

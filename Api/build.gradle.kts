@@ -5,7 +5,7 @@ plugins {
     id("maven-publish")
 }
 
-val apiVersion = "7"
+val apiVersion = "6" // 保持 6
 
 android {
     namespace = "cn.lyric.getter.api"

@@ -17,11 +17,9 @@ import cn.lyric.getter.api.API
 import cn.lyric.getter.api.listener.LyricReceiver
 import java.io.ByteArrayOutputStream
 
-/**
- * 工具类
- */
 object Tools {
     /**
+     * 将 Base64 转换成 Drawable
      *
      * @param [base64] 图片的 Base64
      * @return [Bitmap] 返回图片的 Bitmap?，传入 Base64 无法转换则为 null
@@ -49,21 +47,34 @@ object Tools {
         }
         when (drawable) {
             is BitmapDrawable -> {
-                return drawableToBase64(drawable.bitmap)
+                return bitmapToBase64(drawable.bitmap)
             }
 
             is VectorDrawable -> {
-                return drawableToBase64(makeDrawableToBitmap(drawable))
+                return bitmapToBase64(makeDrawableToBitmap(drawable))
             }
 
             else -> {
                 return try {
-                    drawableToBase64((drawable as BitmapDrawable).bitmap)
+                    bitmapToBase64((drawable as BitmapDrawable).bitmap)
                 } catch (_: Exception) {
                     ""
                 }
             }
         }
+    }
+
+    /**
+     * 将 Bitmap 转换成 Base64
+     *
+     * @param bitmap 图片
+     * @return [String] 返回图片的 Base64
+     */
+    fun bitmapToBase64(bitmap: Bitmap): String {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val bytes = stream.toByteArray()
+        return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 
     /**
@@ -82,26 +93,13 @@ object Tools {
                 val canvas = Canvas(createBitmap)
                 layerDrawable.setBounds(0, 0, canvas.width, canvas.height)
                 layerDrawable.draw(canvas)
-                drawableToBase64(createBitmap)
+                bitmapToBase64(createBitmap)
             } else {
                 ""
             }
         } else {
             ""
         }
-    }
-
-    /**
-     * 将 Bitmap 转换成 Base64
-     *
-     * @param bitmap 图片
-     * @return [String] 返回图片的 Base64
-     */
-    fun drawableToBase64(bitmap: Bitmap): String {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        val bytes = stream.toByteArray()
-        return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 
     private fun makeDrawableToBitmap(drawable: Drawable): Bitmap {
