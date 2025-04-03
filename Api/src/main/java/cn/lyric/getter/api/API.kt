@@ -1,5 +1,6 @@
 package cn.lyric.getter.api
 
+import android.media.MediaMetadata
 import cn.lyric.getter.api.data.ExtraData
 
 class API {
@@ -18,6 +19,13 @@ class API {
      * @param extra [HashMap] 额外参数
      */
     fun sendLyric(lyric: String, extra: ExtraData = ExtraData()) {}
+
+    /**
+     * 发送元数据
+     *
+     * @param mediaMetadata [MediaMetadata] 元数据
+     */
+    fun sendMediaData(mediaMetadata: MediaMetadata) {}
 
     /**
      * 清除歌词
