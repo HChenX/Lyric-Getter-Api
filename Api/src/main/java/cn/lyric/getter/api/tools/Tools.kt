@@ -13,7 +13,6 @@ import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.VectorDrawable
 import android.os.Build
 import android.util.Base64
-import cn.lyric.getter.api.API
 import cn.lyric.getter.api.listener.LyricReceiver
 import java.io.ByteArrayOutputStream
 
@@ -112,15 +111,18 @@ object Tools {
         return bitmap
     }
 
+    @Deprecated(message = "UnUsed ApiVersion", replaceWith = ReplaceWith("registerLyricListener(context, lyricReceiver)", "cn.lyric.getter.api.tools.Tools.registerLyricListener"))
+    fun registerLyricListener(context: Context, apiVersion: Int, lyricReceiver: LyricReceiver) {
+        registerLyricListener(context, lyricReceiver)
+    }
+
     /**
      * 注册歌词监听器
      * @param context [context] Context
-     * @param apiVersion [Int] 当前 Api 版本
      * @param lyricReceiver [LyricReceiver]
      */
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    fun registerLyricListener(context: Context, apiVersion: Int, lyricReceiver: LyricReceiver) {
-        if (apiVersion != API.API_VERSION) return
+    fun registerLyricListener(context: Context, lyricReceiver: LyricReceiver) {
         val intentFilter = IntentFilter().apply { addAction("Lyric_Data") }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.registerReceiver(lyricReceiver, intentFilter, Context.RECEIVER_EXPORTED)
