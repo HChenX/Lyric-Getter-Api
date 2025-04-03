@@ -45,6 +45,8 @@ class ExtraData() {
 
     /**
      * artist [String] 当前音乐的艺术家
+     *
+     * 数据来源于 [MediaMetadata]
      */
     var artist: String
         get() = getString("artist", "")
@@ -52,6 +54,8 @@ class ExtraData() {
 
     /**
      * album [String] 当前音乐的专辑
+     *
+     * 数据来源于 [MediaMetadata]
      * */
     var album: String
         get() = getString("album", "")
@@ -59,6 +63,8 @@ class ExtraData() {
 
     /**
      * title [String] 当前音乐的标题
+     *
+     * 数据来源于 [MediaMetadata]
      *
      * 部分应用可能会使用此标志传递歌词，请注意判断
      */
@@ -70,8 +76,12 @@ class ExtraData() {
      * mediaMetadata [MediaMetadata] 当前音乐的元数据
      */
     var mediaMetadata: MediaMetadata?
-        get() = getParcelable("mediaMetadata", null) as MediaMetadata
-        set(value) = setParcelable("mediaMetadata", value as Parcelable)
+        get() {
+            val metadata = getParcelable("mediaMetadata")
+            return if (metadata == null) null
+            else metadata as MediaMetadata
+        }
+        set(value) = setParcelable("mediaMetadata", value!! as Parcelable)
 
     /**
      * delay [Int] 延迟时间（毫秒）（此句歌词显示时间，用于控制歌词速度）
@@ -123,8 +133,11 @@ class ExtraData() {
         return (extra[key] ?: default) as Double
     }
 
-    private fun getParcelable(key: String, default: Parcelable?): Parcelable? {
-        return (extra[key] ?: default) as Parcelable
+    private fun getParcelable(key: String): Parcelable? {
+        val parcelable = extra[key]
+
+        return if (parcelable == null) null
+        else parcelable as Parcelable
     }
 
     private fun setString(key: String, value: String) {

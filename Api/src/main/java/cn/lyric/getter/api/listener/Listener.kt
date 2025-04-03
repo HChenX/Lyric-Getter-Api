@@ -6,4 +6,5 @@ interface Listener {
     fun onReceived(lyricData: LyricData)
     fun onUpdate(lyricData: LyricData)
     fun onStop(lyricData: LyricData)
+    fun onMediaData(lyricData: LyricData)
 }
