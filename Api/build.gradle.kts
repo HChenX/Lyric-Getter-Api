@@ -4,7 +4,9 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("maven-publish")
 }
-val apiVersion = "6"
+
+val apiVersion = "7"
+
 android {
     namespace = "cn.lyric.getter.api"
     compileSdk = 34
@@ -19,10 +21,12 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.majorVersion
     }
@@ -30,6 +34,7 @@ android {
 
 dependencies {
 }
+
 afterEvaluate {
     publishing {
         publications {

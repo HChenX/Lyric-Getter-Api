@@ -1,16 +1,14 @@
 package cn.lyric.getter.api
 
-import android.content.Context
 import cn.lyric.getter.api.data.ExtraData
 
 class API {
     /**
      * Has enable
      * 是否启用
-     * @return 是否启用，普通环境下为false，被Hook后为true
+     * @return 是否启用，普通环境下为 false，被 Hook 后为 true
      */
     val hasEnable = false
-
 
     /**
      *
@@ -20,7 +18,6 @@ class API {
      * @param extra [HashMap] 额外参数
      */
     fun sendLyric(lyric: String, extra: ExtraData = ExtraData()) {}
-
 
     /**
      * 清除歌词

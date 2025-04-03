@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import cn.lyric.getter.api.data.type.OperateType
 import cn.lyric.getter.api.data.LyricData
+import cn.lyric.getter.api.data.type.OperateType
 
 abstract class LyricListener : Listener {
     /**
@@ -36,9 +36,7 @@ abstract class LyricListener : Listener {
      */
     override fun onStop(lyricData: LyricData) {
     }
-
 }
-
 
 class LyricReceiver(private val lyricListener: LyricListener) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

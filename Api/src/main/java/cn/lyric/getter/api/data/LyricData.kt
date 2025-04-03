@@ -6,8 +6,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import cn.lyric.getter.api.data.type.OperateType
 
-@SuppressLint("ParcelClassLoader") class LyricData private constructor(parcel: Parcel) : Parcelable {
-
+@SuppressLint("ParcelClassLoader")
+class LyricData private constructor(parcel: Parcel) : Parcelable {
     /**
      * Type [OperateType] 歌词数据类型
      */
@@ -38,6 +38,7 @@ import cn.lyric.getter.api.data.type.OperateType
                         is Float -> putFloat(key, value)
                         is Long -> putLong(key, value)
                         is Double -> putDouble(key, value)
+                        is Parcelable -> putParcelable(key, value)
                     }
                 }
             }
