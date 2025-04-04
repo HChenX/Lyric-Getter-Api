@@ -1,10 +1,18 @@
 package cn.lyric.getter.api.data
 
+import android.graphics.Bitmap
 import android.media.MediaMetadata
+import android.os.Build
+import android.os.Bundle
 import android.os.Parcelable
+import cn.lyric.getter.api.tools.Tools
 
 class ExtraData() {
     var extra: HashMap<String, Any> = HashMap()
+
+    companion object {
+        private val keys = arrayOf(MediaMetadata.METADATA_KEY_ART, MediaMetadata.METADATA_KEY_ALBUM_ART, MediaMetadata.METADATA_KEY_DISPLAY_ICON)
+    }
 
     @Deprecated(message = "Not Recommended")
     constructor(customIcon: Boolean, base64Icon: String, useOwnMusicController: Boolean, packageName: String, delay: Int) : this() {
@@ -18,6 +26,7 @@ class ExtraData() {
     /**
      * customIcon [Boolean] 是否使用自定义图标
      */
+    @Deprecated(message = "Unused, Just set base64Icon or check it is not empty")
     var customIcon: Boolean
         get() = getBoolean("customIcon", false)
         set(value) = setBoolean("customIcon", value)
@@ -81,7 +90,26 @@ class ExtraData() {
             return if (metadata == null) null
             else metadata as MediaMetadata
         }
-        set(value) = setParcelable("mediaMetadata", value!! as Parcelable)
+        set(value) {
+            val fieldBundle = value!!::class.java.getDeclaredField("mBundle")
+            fieldBundle.isAccessible = true
+            val bundle = fieldBundle.get(value) as Bundle
+            bundle.transferBitmapToBase64()
+
+            setParcelable("mediaMetadata", value)
+        }
+
+    /**
+     * 因为传输数据大小限制，已自动将 [MediaMetadata] 中 Bitmap 转换为 Base64 数据
+     *
+     * 请使用本接口获取 [MediaMetadata] 中的 Bitmap 数据！
+     *
+     * key 可以是 [MediaMetadata.METADATA_KEY_ART], [MediaMetadata.METADATA_KEY_ALBUM_ART], [MediaMetadata.METADATA_KEY_DISPLAY_ICON]
+     * 与 [MediaMetadata] 原方法包含的 key 相同
+     */
+    fun MediaMetadata.getBitmapBase64(key: String): String {
+        return this.getString(key);
+    }
 
     /**
      * delay [Int] 延迟时间（毫秒）（此句歌词显示时间，用于控制歌词速度）
@@ -106,6 +134,21 @@ class ExtraData() {
      */
     fun mergeExtra(other: HashMap<String, Any>) {
         extra.putAll(other)
+    }
+
+    private fun Bundle.transferBitmapToBase64() {
+        keys.forEach {
+            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                this.getParcelable<Bitmap>(it, Bitmap::class.java)
+            } else {
+                this.getParcelable<Bitmap>(it)
+            }
+
+            if (bitmap == null) this.putString(it, "")
+            else this.putString(it, Tools.bitmapToBase64(bitmap))
+
+            this.remove(it)
+        }
     }
 
     // ---------------------- 数据读写 --------------------------

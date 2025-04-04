@@ -23,7 +23,7 @@ object Tools {
      * @param [base64] 图片的 Base64
      * @return [Bitmap] 返回图片的 Bitmap?，传入 Base64 无法转换则为 null
      */
-    fun base64ToDrawable(base64: String): Bitmap? {
+    fun base64ToBitmap(base64: String): Bitmap? {
         return try {
             val bitmapArray: ByteArray = Base64.decode(base64, Base64.DEFAULT)
             BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.size)

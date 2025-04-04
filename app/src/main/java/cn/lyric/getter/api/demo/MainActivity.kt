@@ -62,7 +62,7 @@ class MainActivity : Activity() {
                 findViewById<TextView>(R.id.useOwnMusicController).text = "useOwnMusicController：${lyricData.extraData.useOwnMusicController}"
                 findViewById<TextView>(R.id.toString).text = "toString：$lyricData"
                 if (lyricData.extraData.customIcon) {
-                    findViewById<ImageView>(R.id.icon).setImageBitmap(Tools.base64ToDrawable(lyricData.extraData.base64Icon))
+                    findViewById<ImageView>(R.id.icon).setImageBitmap(Tools.base64ToBitmap(lyricData.extraData.base64Icon))
                 } else {
                     findViewById<ImageView>(R.id.icon).setImageBitmap(null)
                 }
